@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+
+.navBar {
+    height: 75px;
+    font-family: 'Cairo', sans-serif;
+    color: black;
+    background-color: #F7EC83;
+    display: flex;
+    justify-content: center;
+}
+
+.sabelImg
+{
+    width: 40%;
+}
+
+Nav a.active {
+
+}
+
+.login {
+    background-color: transparent;
+    color: #f26131 !important;
+    width: 100px;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.joinNow {
+    background-color: #f26131 !important;
+    border: none;
+    width: 100px;
+    color: white !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    list-style: none;
+}
+
+.li {
+    margin: 5px 20px;
+    text-decoration: none;
+    color: #0A5075;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.li:hover {
+    color: black;
+}
+
+.navbarScroll {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.active {
+  font-weight: bold;
+  border-bottom: 2px solid #0A5075;
+}
+
+#basic-navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbarTogglerIcon {
+    outline: none !important;
+    box-shadow: none !important;
+}

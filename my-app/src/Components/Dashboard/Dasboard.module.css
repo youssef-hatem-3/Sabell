@@ -1,0 +1,11 @@
+.headTitle
+{
+    color: #0D4E73 ;
+    font-weight: 600;
+}
+.tableHeader
+{
+    background-color: #0D4E73 !important;
+    color: aqua !important;
+    border: 5px solid red;
+}

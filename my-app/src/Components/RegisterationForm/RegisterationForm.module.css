@@ -1,0 +1,16 @@
+.label
+{
+    color: #104968;
+}
+.headTitle
+{
+    color: #0D4E73 ;
+    font-weight: 600;
+}
+.formStyle
+{
+    padding: 10px;
+    border: 2px solid rgb(231, 231, 231);
+    border-radius: 5px;
+    background-color: #ececec;
+}

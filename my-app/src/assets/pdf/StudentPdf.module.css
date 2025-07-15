@@ -1,0 +1,14 @@
+.page {
+    padding: 20;
+    font-family: "Cairo";
+    direction: "rtl";
+}
+
+.section {
+    margin-bottom: 10
+}
+
+.label {
+    font-size: 14;
+    margin-bottom: 5
+}

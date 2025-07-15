@@ -1,0 +1,23 @@
+.page-with-bg {
+  position: relative;
+  min-height: 100vh;
+  font-family: 'Cairo', sans-serif;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.page-with-bg::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background-image: url('../src/assets/imgs/—Pngtree—islamic\ pattern\ white\ background_1917017.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4; /* adjust as needed */
+  z-index: -1; /* keep it behind content */
+}
+
+.form-control
+{
+    margin-top: 10px !important;
+}
