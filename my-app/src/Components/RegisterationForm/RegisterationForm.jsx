@@ -46,7 +46,7 @@ function RegistrationForm() {
         job: student.job || '',
         residence: student.address || '',
         degree: student.levelOfStudy || '',
-        status: student.status || '',
+        status: student.status || 'ENROLLED_ACTIVE',
         submissionDate: student.management?.submissionDate || '',
         memorizationLevel: student.acceptance?.lastSavingAmount || '',
         examinerName: student.acceptance?.examineTeacherName || '',
@@ -212,15 +212,22 @@ function RegistrationForm() {
 
                     <div className="col-md-4 mb-3">
                         <label className={`${style.label}`}>حالة الطالب</label>
-                        <input type="text" className="form-control" name="status" value={formData.status} onChange={handleChange} />
+                        <select
+                        className="form-control"
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        >
+                            <option value="">-- اختر مستوى الطالب --</option>
+                            <option value="ENROLLED_ACTIVE">مقيد/نشط</option>
+                            <option value="TEMPORARILY_EXCLUDED">مستبعد مؤقت</option>
+                            <option value="PENDING">قيد الانتظار</option>
+                            <option value="PERMANENTLY_EXCLUDED">مستبعد نهائي</option>
+                            <option value="SUSPENDED">موقوف</option>
+                        </select>
                         {errors.status && <div className="text-danger">{errors.status}</div>}
                     </div>
 
-                    <div className="col-md-4 mb-3">
-                        <label className={`${style.label}`}>التوقيع</label>
-                        <input type="text" className="form-control" name="signature" value={formData.signature} onChange={handleChange} />
-                        {errors.signature && <div className="text-danger">{errors.signature}</div>}
-                    </div>
                 </div>
             </form>
             <form className={`${style.formStyle} my-4`}>
@@ -246,12 +253,15 @@ function RegistrationForm() {
                             value={formData.level}
                             onChange={handleChange}
                         >
-                            <option value="">-- اختر المستوى --</option>
-                            <option value="ENROLLED_CTIVE">مقيد/نشط</option>
-                            <option value="TEMPORARILY_EXCLUDED">مستبعد مؤقت</option>
-                            <option value="TEMPORARILY_EXCLUDED">قيد الانتظار</option>
-                            <option value="PERMANENTLY_EXCLUDED">مستبعد نهائي</option>
-                            <option value="SUSPENDED">موقوف</option>
+                            <option value="">-- اختر حالة الطالب --</option>
+                            <option value="PREPARATORY">تمهيدي</option>
+                            <option value="FIRST">أولى</option>
+                            <option value="SECOND">ثانية</option>
+                            <option value="THIRD">ثالثة</option>
+                            <option value="FOURTH">رابعة</option>
+                            <option value="FIFTH">خامسة</option>
+                            <option value="SIXTH">سادسة</option>
+                            <option value="FINAL">خاتم</option>
                         </select>
                         {errors.level && <div className="text-danger">{errors.level}</div>}
                     </div>
