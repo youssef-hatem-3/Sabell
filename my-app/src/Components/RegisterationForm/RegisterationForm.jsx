@@ -7,11 +7,12 @@ import style from './RegisterationForm.module.css';
 import axios from 'axios';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import StudentPdf from '../../assets/pdf/StudentPdf';
-
+import { useNavigate } from "react-router-dom";
 
 function RegistrationForm() {
     const location = useLocation();
     const editingStudent = location.state?.student || null;
+    const navigate = useNavigate();
 
     const emptyStudentData = {
         submissionDate: '',
@@ -25,7 +26,7 @@ function RegistrationForm() {
         workplace: '',
         residence: '',
         memorizationLevel: '',
-        examinerName: '',
+        examineTeacherName: '',
         signature: '',
         specifiedTime: '',
         actualAttendanceDate: '',
@@ -49,7 +50,7 @@ function RegistrationForm() {
         status: student.status || '',
         submissionDate: student.management?.submissionDate || '',
         memorizationLevel: student.acceptance?.lastSavingAmount || '',
-        examinerName: student.acceptance?.examineTeacherName || '',
+        examineTeacherName: student.acceptance?.examineTeacherName || '',
         level: student.acceptance?.level || '',
         actualAttendanceDate: student.management?.actualAttendanceDate || '',
         specifiedTime: student.management?.specifiedTime || '',
@@ -88,60 +89,63 @@ function RegistrationForm() {
         setFormData({ ...formData, [target.name]: target.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        const validationErrors = validate();
-        if (validationErrors) {
-            setErrors(validationErrors);
-            console.log(validationErrors);
-            return;
-        }
+    const validationErrors = validate();
+    if (validationErrors) {
+        setErrors(validationErrors);
+        console.log(validationErrors);
+        return;
+    }
 
-        const apiPayload = {
-            studentName: formData.name,
-            age: parseInt(formData.age),
-            nationalId: formData.nationalId,
-            phoneNumber: formData.phone,
-            placeOfWork: formData.workplace,
-            job: formData.job,
-            address: formData.residence,
-            levelOfStudy: formData.degree,
-            status: formData.status,
-            lastSavingAmount: formData.memorizationLevel,
-            examineTeacherName: formData.examinerName,
-            level: formData.level,
-            actualAttendanceDate: formData.actualAttendanceDate,
-            specifiedTime: formData.specifiedTime,
-            instituteFees: formData.instituteFees,
-            studentGroupId: formData.studentGroupId,
-            receiptNumber: formData.receiptNumber,
-            submissionDate: formData.submissionDate,
-            receiver: formData.receiver,
-        };
-
-        try {
-            if (editingStudent) {
-                console.log('edit');
-
-                await axios.put(
-                    `http://localhost:8085/api/users/update-user/${editingStudent.id}`,
-                    apiPayload
-                );
-                alert('تم التعديل بنجاح');
-            } else {
-                // لو بنسجّل جديد
-                await axios.post('http://localhost:8085/api/users/register', apiPayload);
-                alert('تم الإرسال بنجاح');
-            }
-
-            setFormData(emptyStudentData);
-            handleClear();
-        } catch (error) {
-            console.log(error);
-            alert('حدث خطأ أثناء الحفظ');
-        }
+    const apiPayload = {
+        studentName: formData.name,
+        age: parseInt(formData.age),
+        nationalId: formData.nationalId,
+        phoneNumber: formData.phone,
+        placeOfWork: formData.workplace,
+        job: formData.job,
+        address: formData.residence,
+        levelOfStudy: formData.degree,
+        status: formData.status,
+        lastSavingAmount: formData.memorizationLevel,
+        examineTeacherName: formData.examineTeacherName,
+        level: formData.level,
+        actualAttendanceDate: formData.actualAttendanceDate,
+        specifiedTime: formData.specifiedTime,
+        instituteFees: formData.instituteFees,
+        studentGroupId: formData.studentGroupId,
+        receiptNumber: formData.receiptNumber,
+        submissionDate: formData.submissionDate,
+        receiver: formData.receiver,
     };
+
+    try {
+        if (editingStudent) {
+            await axios.put(
+                `http://localhost:8086/api/users/update-user/${editingStudent.id}`,
+                apiPayload
+            );
+            alert('تم التعديل بنجاح');
+        } else {
+            await axios.post(
+                'http://localhost:8086/api/users/register',
+                apiPayload
+            );
+            alert('تم الإرسال بنجاح');
+        }
+
+        setFormData(emptyStudentData);
+        handleClear();
+        navigate("/dashboard");
+
+    } catch (error) {
+        console.log(error);
+        alert('حدث خطأ أثناء الحفظ');
+    }
+};
+
 
     const handleClear = () => {
         setFormData(emptyStudentData);
@@ -212,7 +216,21 @@ function RegistrationForm() {
 
                     <div className="col-md-4 mb-3">
                         <label className={`${style.label}`}>حالة الطالب</label>
-                        <input type="text" className="form-control" name="status" value={formData.status} onChange={handleChange} />
+                        <select
+                            className="form-control"
+                            name="status"
+                            value={formData.status}
+                            onChange={handleChange}
+                        >
+                            <option value="">-- اختر الحالة --</option>
+                            <option value="ENROLLED_ACTIVE">مقيد/نشط</option>
+                            <option value="TEMPORARILY_EXCLUDED">مستبعد مؤقت</option>
+                            <option value="PENDING">قيد الانتظار</option>
+                            <option value="ENROLLED">تم الالتحاق</option>
+                            <option value="OVER_SIXTY">فوق الـ 60</option>
+                            <option value="PERMANENTLY_EXCLUDED">مستبعد نهائي</option>
+                            <option value="SUSPENDED">موقوف</option>
+                        </select>
                         {errors.status && <div className="text-danger">{errors.status}</div>}
                     </div>
 
@@ -234,8 +252,8 @@ function RegistrationForm() {
 
                     <div className="col-md-4 mb-3">
                         <label className={`${style.label}`}>اسم الشيخ الممتحن</label>
-                        <input type="text" className="form-control" name="examinerName" value={formData.examinerName} onChange={handleChange} />
-                        {errors.examinerName && <div className="text-danger">{errors.examinerName}</div>}
+                        <input type="text" className="form-control" name="examineTeacherName" value={formData.examineTeacherName} onChange={handleChange} />
+                        {errors.examineTeacherName && <div className="text-danger">{errors.examineTeacherName}</div>}
                     </div>
 
                     <div className="col-md-4 mb-3">

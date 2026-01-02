@@ -10,7 +10,7 @@ import axios from 'axios';
 function Dashboard() {
   const [searchText, setSearchText] = useState('');
   const [searchDate, setSearchDate] = useState('');
-  const [searchLevel, setSearchLevel] = useState('');
+  const [examineTeacherName, setexamineTeacherName] = useState('');
 
   const navigate = useNavigate();
 
@@ -19,16 +19,16 @@ function Dashboard() {
 
 const filteredStudents = students.filter((student) =>
   (
-    (student.nationalId || '').includes(searchText) ||
-    (student.phoneNumber || '').includes(searchText) ||
-    (student.studentName || '').includes(searchText)
+    (student.nationalId || '').toLowerCase().includes(searchText) ||
+    (student.phoneNumber || '').toLowerCase().includes(searchText) ||
+    (student.studentName || '').toLowerCase().includes(searchText)
   ) &&
   (searchDate === '' || (student.management?.submissionDate || '') === searchDate) &&
-  (searchLevel === '' || (student.acceptance?.lastSavingAmount || '').includes(searchLevel))
+  (examineTeacherName === '' || (student.acceptance?.examineTeacherName || '').toLowerCase().includes(examineTeacherName))
 );
 
   useEffect(() => {
-    axios.get('http://localhost:8085/api/users/all')
+    axios.get('http://localhost:8086/api/users/all')
       .then(response => {
         setStudents(response.data);
         console.log(response.data);
@@ -57,21 +57,11 @@ const filteredStudents = students.filter((student) =>
 
         <div className="col-md-4 mb-2">
           <input
-            type="date"
-            className="form-control"
-            placeholder="ابحث بتاريخ التقديم"
-            value={searchDate}
-            onChange={(e) => setSearchDate(e.target.value)}
-          />
-        </div>
-
-        <div className="col-md-4 mb-2">
-          <input
             type="text"
             className="form-control"
-            placeholder="ابحث بمستوى الطالب"
-            value={searchLevel}
-            onChange={(e) => setSearchLevel(e.target.value)}
+            placeholder="ابحث باسم الشيخ الممتحن"
+            value={examineTeacherName}
+            onChange={(e) => setexamineTeacherName(e.target.value)}
           />
         </div>
 
@@ -87,7 +77,7 @@ const filteredStudents = students.filter((student) =>
               <th>الرقم القومي</th>
               <th>رقم الهاتف</th>
               <th>المؤهل</th>
-              <th>مستوى الطالب</th>
+              <th>اسم الشيخ</th>
               <th>حذف</th>
             </tr>
           </thead>
@@ -100,7 +90,7 @@ const filteredStudents = students.filter((student) =>
                 <td>{student.nationalId}</td>
                 <td>{student.phoneNumber}</td>
                 <td>{student.levelOfStudy}</td>
-                <td>{student.memorizationLevel}</td>
+                <td>{student.acceptance.examineTeacherName}</td>
                 <td className='ps-3'
                   onClick={async (e) => {
                     e.stopPropagation();
@@ -109,7 +99,7 @@ const filteredStudents = students.filter((student) =>
                     if (!confirmed) return;
 
                     try {
-                      await axios.delete(`http://localhost:8085/api/users/delete-user/${student.id}`);
+                      await axios.delete(`http://localhost:8086/api/users/delete-user/${student.id}`);
                       alert('تم حذف الطالب بنجاح');
                       // بعد الحذف، حدّث القائمة
                       setStudents(prev => prev.filter(s => s.id !== student.id));

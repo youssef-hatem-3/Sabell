@@ -36,7 +36,7 @@ const registrationSchema = Joi.object({
     'string.empty': 'المؤهل الدراسي مطلوب',
     'string.max': 'المؤهل الدراسي يجب ألا يزيد عن 100 حرف',
   }),
-  status: Joi.string().valid('ACTIVE', 'TEMPORARILY_EXCLUDED', 'PERMANENTLY_EXCLUDED', 'SUSPENDED','PENDING').required().messages({
+  status: Joi.string().valid('ACTIVE', 'TEMPORARILY_EXCLUDED', 'PERMANENTLY_EXCLUDED', 'SUSPENDED','PENDING', 'ENROLLED', 'OVER_SIXTY').required().messages({
     'any.only': 'الحالة غير صحيحة',
     'string.empty': 'حالة الطالب مطلوبة',
   }),
@@ -47,7 +47,7 @@ const registrationSchema = Joi.object({
   level: Joi.string().max(50).allow('').messages({
     'string.max': 'المستوى يجب ألا يزيد عن 50 حرف',
   }),
-  examinerName: Joi.string().max(100).required().messages({
+  examineTeacherName: Joi.string().max(100).required().messages({
     'string.empty': 'اسم الشيخ الممتحن مطلوب',
     'string.max': 'اسم الشيخ يجب ألا يزيد عن 100 حرف',
   }),
